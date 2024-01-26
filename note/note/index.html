@@ -7,7 +7,7 @@
 <body>
     <div id="content"></div>
     <script>
-        fetch('genshin.md')
+        fetch('note.md')
             .then(response => response.text())
             .then(text => {
                 document.getElementById('content').innerHTML = marked.parse(text);
