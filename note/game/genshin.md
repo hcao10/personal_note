@@ -1,17 +1,22 @@
-## 4.5
+
+## 4.7
+
 国际服：
 
-[code1](https://genshin.hoyoverse.com/en/gift?code=DAKTDBWTZTYR)
+[code1](https://genshin.hoyoverse.com/en/gift?code=US2VLGSXCAT9)
 
-[code2](https://genshin.hoyoverse.com/en/gift?code=AT3BDSWTYBKD)
 
-[code3](https://genshin.hoyoverse.com/en/gift?code=5TKAUAWAGBJR)
+[code2](https://genshin.hoyoverse.com/en/gift?code=6A2ULZTFVBCV)
+
+
+[code3](https://genshin.hoyoverse.com/en/gift?code=BS3DLYAFVAUH)
+
 
 --------------------------------------------------------------------
 国服：
 
-KW2BZ9WHTU8A
+EX2PESSKFE2W
 
-RXJAG9FGBD9E
+TF27EBBKWX32
 
-3E3SY8FGACQJ
+XF3PFSA2WEKN
