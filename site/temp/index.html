@@ -18,15 +18,29 @@
         th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
         th { background-color: #f2f2f2; }
         input[type="number"] { width: 50px; }
-        button { margin-top: 20px; padding: 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
-        button:hover { background-color: #45a049; }
+        .floating-buttons {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .floating-buttons button {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .floating-buttons button:hover { background-color: #45a049; }
     </style>
 </head>
 <body>
     <div id="root"></div>
 
     <script type="text/babel">
-        // Initialize Firebase with your configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDmOa8c-pL9ixZigGkb3US8pCHa-cR8v3U",
             authDomain: "xihuoguo-78035.firebaseapp.com",
@@ -123,7 +137,6 @@
             const [orders, setOrders] = React.useState({});
 
             React.useEffect(() => {
-                // Listen for changes in the database
                 const ordersRef = firebase.database().ref('orders');
                 ordersRef.on('value', (snapshot) => {
                     const data = snapshot.val();
@@ -132,14 +145,12 @@
                     }
                 });
 
-                // Cleanup listener on component unmount
                 return () => ordersRef.off();
             }, []);
 
             const handleQuantityChange = (itemName, quantity) => {
                 const newOrders = { ...orders, [itemName]: quantity };
                 setOrders(newOrders);
-                // Update Firebase
                 firebase.database().ref('orders').set(newOrders);
             };
 
@@ -151,6 +162,13 @@
                 navigator.clipboard.writeText(orderSummary)
                     .then(() => alert('订单已复制到剪贴板'))
                     .catch(err => console.error('复制失败:', err));
+            };
+
+            const clearAllOrders = () => {
+                if (window.confirm('确定要清除所有菜品吗？')) {
+                    setOrders({});
+                    firebase.database().ref('orders').set({});
+                }
             };
 
             return (
@@ -182,7 +200,10 @@
                             ))}
                         </tbody>
                     </table>
-                    <button onClick={copyOrderToClipboard}>复制订单到剪贴板</button>
+                    <div className="floating-buttons">
+                        <button onClick={copyOrderToClipboard}>复制订单到剪贴板</button>
+                        <button onClick={clearAllOrders}>清除所有菜品</button>
+                    </div>
                 </div>
             );
         }
