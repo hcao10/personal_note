@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>火锅点餐系统</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; }
+        h1 { color: #333; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        input[type="number"] { width: 50px; }
+        button { margin-top: 20px; padding: 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #45a049; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const menuItems = [
+            { name: "全红小锅1000克", price: 25 },
+            { name: "全红中锅1500克", price: 30 },
+            { name: "额外加红油500克X份", price: 5 },
+            { name: "番茄酱香锅", price: 25 },
+            { name: "酸菜鱼", price: 6.99 },
+            { name: "毛肚", price: 3.99 },
+            { name: "九元类约150克", price: 9.99 },
+            { name: "红糖冰粉", price: 3.9 },
+            { name: "酸梅汤1升", price: 5 },
+            { name: "可乐", price: 1.5 },
+            { name: "雪碧", price: 1.5 },
+            { name: "果汁", price: 2 },
+            // ... 添加更多菜品
+        ];
+
+        function App() {
+            const [orders, setOrders] = React.useState(() => {
+                const savedOrders = localStorage.getItem('orders');
+                return savedOrders ? JSON.parse(savedOrders) : {};
+            });
+
+            React.useEffect(() => {
+                localStorage.setItem('orders', JSON.stringify(orders));
+            }, [orders]);
+
+            const handleQuantityChange = (itemName, quantity) => {
+                setOrders(prevOrders => ({
+                    ...prevOrders,
+                    [itemName]: quantity
+                }));
+            };
+
+            const copyOrderToClipboard = () => {
+                const orderSummary = Object.entries(orders)
+                    .filter(([_, quantity]) => quantity > 0)
+                    .map(([item, quantity]) => `${item} - ${quantity}`)
+                    .join('\n');
+                navigator.clipboard.writeText(orderSummary)
+                    .then(() => alert('订单已复制到剪贴板'))
+                    .catch(err => console.error('复制失败:', err));
+            };
+
+            return (
+                <div>
+                    <h1>火锅点餐系统</h1>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>菜品</th>
+                                <th>价格 (美元)</th>
+                                <th>数量</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {menuItems.map(item => (
+                                <tr key={item.name}>
+                                    <td>{item.name}</td>
+                                    <td>${item.price.toFixed(2)}</td>
+                                    <td>
+                                        <input
+                                            type="number"
+                                            min="0"
+                                            value={orders[item.name] || 0}
+                                            onChange={(e) => handleQuantityChange(item.name, parseInt(e.target.value) || 0)}
+                                        />
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    <button onClick={copyOrderToClipboard}>复制订单到剪贴板</button>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
