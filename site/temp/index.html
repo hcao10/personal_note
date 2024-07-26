@@ -7,6 +7,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-analytics-compat.js"></script>
     <style>
         body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; }
         h1 { color: #333; }
@@ -22,10 +26,24 @@
     <div id="root"></div>
 
     <script type="text/babel">
+        // Initialize Firebase with your configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDmOa8c-pL9ixZigGkb3US8pCHa-cR8v3U",
+            authDomain: "xihuoguo-78035.firebaseapp.com",
+            projectId: "xihuoguo-78035",
+            storageBucket: "xihuoguo-78035.appspot.com",
+            messagingSenderId: "155471484095",
+            appId: "1:155471484095:web:b258608fd3ad9a8f05a20a",
+            measurementId: "G-N1T5L8WEN7"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+
         const menuItems = [
             { name: "全红小锅1000克 (推荐四人以下)", price: 25 },
             { name: "全红中锅1500克 (推荐四人以上)", price: 30 },
-            { name: "额外加红油500克/份", price: 5 },
+            { name: "额外加红油500克X份", price: 5 },
             { name: "番茄酱香锅", price: 25 },
             { name: "酸菜鱼", price: 6.99 },
             { name: "毛肚", price: 3.99 },
@@ -37,11 +55,11 @@
             { name: "红烧肥肠", price: 9.99 },
             { name: "猪耳朵（猪大梯）", price: 9.99 },
             { name: "黑椒嫩牛肉", price: 9.99 },
-            { name: "竹笋片", price: 3.99 },
-            { name: "莲藕片", price: 3.99 },
-            { name: "白萝卜片", price: 3.99 },
-            { name: "香菜", price: 3.99 },
-            { name: "山药", price: 6.99 },
+            { name: "竹笋片", price: null },
+            { name: "莲藕片", price: null },
+            { name: "白萝卜片", price: null },
+            { name: "香菜", price: null },
+            { name: "山药", price: null },
             { name: "海鲜菇", price: null },
             { name: "豆皮", price: null },
             { name: "红薯宽粉", price: null },
@@ -102,20 +120,27 @@
         ];
 
         function App() {
-            const [orders, setOrders] = React.useState(() => {
-                const savedOrders = localStorage.getItem('orders');
-                return savedOrders ? JSON.parse(savedOrders) : {};
-            });
+            const [orders, setOrders] = React.useState({});
 
             React.useEffect(() => {
-                localStorage.setItem('orders', JSON.stringify(orders));
-            }, [orders]);
+                // Listen for changes in the database
+                const ordersRef = firebase.database().ref('orders');
+                ordersRef.on('value', (snapshot) => {
+                    const data = snapshot.val();
+                    if (data) {
+                        setOrders(data);
+                    }
+                });
+
+                // Cleanup listener on component unmount
+                return () => ordersRef.off();
+            }, []);
 
             const handleQuantityChange = (itemName, quantity) => {
-                setOrders(prevOrders => ({
-                    ...prevOrders,
-                    [itemName]: quantity
-                }));
+                const newOrders = { ...orders, [itemName]: quantity };
+                setOrders(newOrders);
+                // Update Firebase
+                firebase.database().ref('orders').set(newOrders);
             };
 
             const copyOrderToClipboard = () => {
@@ -135,7 +160,7 @@
                         <thead>
                             <tr>
                                 <th>菜品</th>
-                                <th>价格 (美元，可能不对)</th>
+                                <th>价格 (美元)</th>
                                 <th>数量</th>
                             </tr>
                         </thead>
@@ -143,7 +168,7 @@
                             {menuItems.map(item => (
                                 <tr key={item.name}>
                                     <td>{item.name}</td>
-                                    <td>{item.price ? `$${item.price.toFixed(2)}` : '市价'}</td>
+                                    <td>{item.price ? `$${item.price.toFixed(2)}` : '下次一定输入价格'}</td>
                                     <td>
                                         <input
                                             type="number"
@@ -156,7 +181,7 @@
                             ))}
                         </tbody>
                     </table>
-                    <button onClick={copyOrderToClipboard}>复制订单到剪贴板（可以直接粘贴给老板）</button>
+                    <button onClick={copyOrderToClipboard}>复制订单到剪贴板</button>
                 </div>
             );
         }
