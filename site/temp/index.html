@@ -156,6 +156,7 @@
             return (
                 <div>
                     <h1>7/27喜火锅吃啥 实在懒得输入价格了 凑合看吧</h1>
+                    <h3>忘了还能谷歌文档截图发给老板了，忽略这个网页吧</h3>
                     <table>
                         <thead>
                             <tr>
@@ -168,7 +169,7 @@
                             {menuItems.map(item => (
                                 <tr key={item.name}>
                                     <td>{item.name}</td>
-                                    <td>{item.price ? `$${item.price.toFixed(2)}` : '下次一定输入价格'}</td>
+                                    <td>{item.price ? `$${item.price.toFixed(2)}` : '还没输入呢'}</td>
                                     <td>
                                         <input
                                             type="number"
