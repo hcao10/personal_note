@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>7/27喜火锅吃啥???</title>
+    <title>火锅点餐系统</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
@@ -52,16 +52,6 @@
             padding: 5px; 
             border: 1px solid #ddd;
             border-radius: 4px;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            background: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>") 96% / 15% no-repeat #fff;
-            padding-right: 25px;
-        }
-        .quantity-column {
-            width: 80px;
-            min-width: 80px;
-            max-width: 80px;
         }
         .floating-buttons {
             position: fixed;
@@ -84,22 +74,6 @@
         .floating-buttons button:hover { 
             background-color: #45a049; 
         }
-        @media (max-width: 600px) {
-            .container {
-                padding: 10px;
-            }
-            th, td {
-                padding: 8px;
-            }
-            .floating-buttons {
-                right: 10px;
-                bottom: 10px;
-            }
-            .floating-buttons button {
-                font-size: 14px;
-                padding: 8px 12px;
-            }
-        }
     </style>
 </head>
 <body>
@@ -120,7 +94,7 @@
         firebase.analytics();
 
         const menuItems = [
-            { name: "全红小锅1000克 (推荐四人以下)", price: 25 },
+        { name: "全红小锅1000克 (推荐四人以下)", price: 25 },
             { name: "全红中锅1500克 (推荐四人以上)", price: 30 },
             { name: "额外加红油500克X份", price: 5 },
             { name: "番茄鸳鸯锅", price: 25 },
@@ -238,21 +212,21 @@
 
             return (
                 <div className="container">
-                    <h1>7/27喜火锅吃啥</h1>
+                    <h1>火锅点餐系统</h1>
                     <table>
                         <thead>
                             <tr>
                                 <th>菜品</th>
                                 <th>价格 (美元)</th>
-                                <th className="quantity-column">数量</th>
+                                <th>数量</th>
                             </tr>
                         </thead>
                         <tbody>
                             {menuItems.map(item => (
                                 <tr key={item.name}>
                                     <td>{item.name}</td>
-                                    <td>{item.price ? `$${item.price.toFixed(2)}` : '还没输入呢'}</td>
-                                    <td className="quantity-column">
+                                    <td>{item.price ? `$${item.price.toFixed(2)}` : '市价'}</td>
+                                    <td>
                                         <select
                                             value={orders[item.name] || 0}
                                             onChange={(e) => handleQuantityChange(item.name, parseInt(e.target.value))}
@@ -267,7 +241,7 @@
                         </tbody>
                     </table>
                     <div className="floating-buttons">
-                        <button onClick={copyOrderToClibpoard}>复制订单到剪贴板</button>
+                        <button onClick={copyOrderToClipboard}>复制订单到剪贴板</button>
                         <button onClick={clearAllOrders}>清除所有菜品</button>
                     </div>
                 </div>
@@ -276,8 +250,5 @@
 
         ReactDOM.render(<App />, document.getElementById('root'));
     </script>
-    <footer>
-        <p><a href="https://chw.chwjh.com">© 2024 CHW. Made on earth by a human.</a></p>
-      </footer>
 </body>
 </html>
