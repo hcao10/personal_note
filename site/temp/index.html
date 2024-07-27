@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>7/27喜火锅吃啥 实在懒得输入价格了 凑合看吧</title>
+    <title>火锅点餐系统</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
-        <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-analytics-compat.js"></script>
@@ -53,6 +53,16 @@
             padding: 5px; 
             border: 1px solid #ddd;
             border-radius: 4px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>") 96% / 15% no-repeat #fff;
+            padding-right: 25px;
+        }
+        .quantity-column {
+            width: 80px;
+            min-width: 80px;
+            max-width: 80px;
         }
         .floating-buttons {
             position: fixed;
@@ -74,6 +84,22 @@
         }
         .floating-buttons button:hover { 
             background-color: #45a049; 
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            th, td {
+                padding: 8px;
+            }
+            .floating-buttons {
+                right: 10px;
+                bottom: 10px;
+            }
+            .floating-buttons button {
+                font-size: 14px;
+                padding: 8px 12px;
+            }
         }
     </style>
 </head>
@@ -213,14 +239,16 @@
 
             return (
                 <div className="container">
-                    <h1>7/27喜火锅吃啥 实在懒得输入价格了 凑合看吧</h1>
+                    <h1>7/27喜火锅吃啥</h1>
+                    <h3>点的菜会多端实时同步</h3>
+                    <h3>实在懒得输入价格了 凑合看吧</h3>
                     <h3>忘了还能谷歌文档截图发给老板了，忽略这个网页吧</h3>
                     <table>
                         <thead>
                             <tr>
                                 <th>菜品</th>
                                 <th>价格 (美元)</th>
-                                <th>数量</th>
+                                <th className="quantity-column">数量</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -228,7 +256,7 @@
                                 <tr key={item.name}>
                                     <td>{item.name}</td>
                                     <td>{item.price ? `$${item.price.toFixed(2)}` : '还没输入呢'}</td>
-                                    <td>
+                                    <td className="quantity-column">
                                         <select
                                             value={orders[item.name] || 0}
                                             onChange={(e) => handleQuantityChange(item.name, parseInt(e.target.value))}
@@ -243,7 +271,7 @@
                         </tbody>
                     </table>
                     <div className="floating-buttons">
-                        <button onClick={copyOrderToClipboard}>复制订单到剪贴板</button>
+                        <button onClick={copyOrderToClibpoard}>复制订单到剪贴板</button>
                         <button onClick={clearAllOrders}>清除所有菜品</button>
                     </div>
                 </div>
