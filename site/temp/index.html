@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>火锅点餐系统</title>
+    <title>7/27喜火锅吃啥</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
@@ -47,11 +47,23 @@
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
+        .quantity-column {
+            width: 80px;
+            min-width: 80px;
+            max-width: 80px;
+        }
         select { 
             width: 100%; 
             padding: 5px; 
             border: 1px solid #ddd;
             border-radius: 4px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right .7em top 50%;
+            background-size: .65em auto;
         }
         .floating-buttons {
             position: fixed;
@@ -74,6 +86,22 @@
         .floating-buttons button:hover { 
             background-color: #45a049; 
         }
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            th, td {
+                padding: 8px;
+            }
+            .floating-buttons {
+                right: 10px;
+                bottom: 10px;
+            }
+            .floating-buttons button {
+                font-size: 14px;
+                padding: 8px 12px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -95,81 +123,125 @@
 
         const menuItems = [
         { name: "全红小锅1000克 (推荐四人以下)", price: 25 },
-            { name: "全红中锅1500克 (推荐四人以上)", price: 30 },
-            { name: "额外加红油500克X份", price: 5 },
-            { name: "番茄鸳鸯锅", price: 25 },
-            { name: "酸菜鱼", price: 6.99 },
-            { name: "毛肚", price: 3.99 },
-            { name: "藕片", price: 3.99 },
-            { name: "鱿鱼花", price: 3.99 },
-            { name: "蘑菇", price: 3.99 },
-            { name: "凤味牛蹄筋", price: 9.99 },
-            { name: "卤牛肚", price: 9.99 },
-            { name: "红烧肥肠", price: 9.99 },
-            { name: "猪耳朵（猪大梯）", price: 9.99 },
-            { name: "黑椒嫩牛肉", price: 9.99 },
-            { name: "竹笋片", price: null },
-            { name: "莲藕片", price: null },
-            { name: "白萝卜片", price: null },
-            { name: "香菜", price: null },
-            { name: "山药", price: null },
-            { name: "海鲜菇", price: null },
-            { name: "豆皮", price: null },
-            { name: "红薯宽粉", price: null },
-            { name: "土豆片", price: null },
-            { name: "百花卷", price: null },
-            { name: "方便面", price: null },
-            { name: "干工面", price: null },
-            { name: "黑木耳", price: null },
-            { name: "老南瓜", price: null },
-            { name: "黄瓜条", price: null },
-            { name: "煎蛋四个", price: null },
-            { name: "豆芽", price: null },
-            { name: "冬瓜", price: null },
-            { name: "葫芦条", price: null },
-            { name: "鸭血", price: null },
-            { name: "白萝卜花", price: null },
-            { name: "金针菇", price: null },
-            { name: "火锅小酥肉", price: null },
-            { name: "肉多多牛蹄筋", price: null },
-            { name: "白千层肚", price: null },
-            { name: "鸭肠", price: null },
-            { name: "卤猪耳朵", price: null },
-            { name: "火锅小香肠", price: null },
-            { name: "香菜肉丸", price: null },
-            { name: "龙利鱼", price: null },
-            { name: "八爪小章鱼", price: null },
-            { name: "肥牛卷", price: null },
-            { name: "羊肉卷", price: null },
-            { name: "贡菜", price: null },
-            { name: "虾滑", price: null },
-            { name: "山珍牛肝菌", price: null },
-            { name: "海带丝", price: null },
-            { name: "开花脆皮肠", price: null },
-            { name: "半熟小手头", price: null },
-            { name: "鱼籽虾滑", price: null },
-            { name: "双汇火腿肠", price: null },
-            { name: "猪脑花", price: null },
-            { name: "火锅虾饺", price: null },
-            { name: "腰片", price: null },
-            { name: "魔芋", price: null },
-            { name: "豆皮卷", price: null },
-            { name: "白毛肚", price: null },
-            { name: "响铃卷", price: null },
-            { name: "大弹布土豆丝", price: null },
-            { name: "虾仁", price: null },
-            { name: "鲜肉抄手", price: null },
-            { name: "红糖冰粉", price: 3.9 },
-            { name: "酸梅汤1升", price: 5 },
-            { name: "可乐", price: 1.5 },
-            { name: "雪碧", price: 1.5 },
-            { name: "果汁", price: 2 },
-            { name: "小吃", price: null },
-            { name: "凉拌猪耳朵", price: 9 },
-            { name: "烧烤脆肠", price: 9 },
-            { name: "蛋炒饭", price: 8 },
-            { name: "干碟", price: 2 },
-            { name: "养生猪蹄汤", price: 14.99 },
+    { name: "全红中锅1500克 (推荐四人以上)", price: 30 },
+    { name: "额外加红油500克X份", price: 5 },
+    { name: "番茄鸳鸯锅", price: 25 },
+    // $3.99 列
+    { name: "藕片", price: 3.99 },
+    { name: "金针菇", price: 3.99 },
+    { name: "土豆片", price: 3.99 },
+    { name: "白花菜", price: 3.99 },
+    { name: "方便面", price: 3.99 },
+    { name: "手工面", price: 3.99 },
+    { name: "黑木耳", price: 3.99 },
+    { name: "老南瓜", price: 3.99 },
+    { name: "黄瓜条", price: 3.99 },
+    { name: "豆芽", price: 3.99 },
+    { name: "冬瓜", price: 3.99 },
+    { name: "葫芦条", price: 3.99 },
+    { name: "鸭血", price: 3.99 },
+    { name: "白萝卜花", price: 3.99 },
+    { name: "红薯宽粉", price: 3.99 },
+    { name: "莲藕", price: 3.99 },
+    { name: "山药", price: 3.99 },
+    { name: "豆皮卷", price: 3.99 },
+    { name: "年糕", price: 3.99 },
+    { name: "白花菜", price: 3.99 },
+    { name: "手工面", price: 3.99 },
+    { name: "黑木耳", price: 3.99 },
+    { name: "老南瓜", price: 3.99 },
+    { name: "黄瓜条", price: 3.99 },
+    { name: "豆芽", price: 3.99 },
+    { name: "冬瓜", price: 3.99 },
+    { name: "高笋头", price: 3.99 },
+    { name: "黄秋白菜", price: 3.99 },
+    { name: "白萝卜片", price: 3.99 },
+    { name: "尖椒菜片", price: 3.99 },
+    { name: "豆腐包", price: 3.99 },
+    { name: "海带片", price: 3.99 },
+    { name: "龙口粉丝", price: 3.99 },
+    
+    // $6.99 列
+    { name: "六元菜约150克", price: 6.99 },
+    { name: "猪大肠", price: 6.99 },
+    { name: "鹌鹑蛋", price: 6.99 },
+    { name: "火锅小香肠", price: 6.99 },
+    { name: "原汁小肥牛", price: 6.99 },
+    { name: "涮多多牛肉卷", price: 6.99 },
+    { name: "白千层肚", price: 6.99 },
+    { name: "鸭掌", price: 6.99 },
+    { name: "鱿鱼须", price: 6.99 },
+    { name: "金针菇", price: 6.99 },
+    { name: "火锅小香肠", price: 6.99 },
+    { name: "羊肉卷", price: 6.99 },
+    { name: "龙利鱼", price: 6.99 },
+    { name: "八爪小章鱼", price: 6.99 },
+    { name: "肥牛卷", price: 6.99 },
+    { name: "羊肉卷", price: 6.99 },
+    { name: "贡菜", price: 6.99 },
+    { name: "虾滑", price: 6.99 },
+    { name: "山珍牛肝菌", price: 6.99 },
+    { name: "海带丝", price: 6.99 },
+    { name: "开花脆皮肠", price: 6.99 },
+    { name: "半熟小手头", price: 6.99 },
+    { name: "鱼籽虾滑", price: 6.99 },
+    { name: "双汇火腿肠", price: 6.99 },
+    { name: "猪脑花", price: 6.99 },
+    { name: "火锅虾饺", price: 6.99 },
+    { name: "腰片", price: 6.99 },
+    { name: "魔芋", price: 6.99 },
+    { name: "豆皮卷", price: 6.99 },
+    { name: "白毛肚", price: 6.99 },
+    { name: "响铃卷", price: 6.99 },
+    { name: "大弹布土豆丝", price: 6.99 },
+    { name: "虾仁", price: 6.99 },
+    { name: "鲜肉抄手", price: 6.99 },
+
+    // $9.99 列
+    { name: "九元菜约150克", price: 9.99 },
+    { name: "凤味牛蹄筋", price: 9.99 },
+    { name: "卤牛肚", price: 9.99 },
+    { name: "红烧肥肠", price: 9.99 },
+    { name: "猪耳朵（猪大梯）", price: 9.99 },
+    { name: "黑毛肉", price: 9.99 },
+    { name: "嫩牛肉", price: 9.99 },
+    { name: "香辣嫩牛肉", price: 9.99 },
+    { name: "脆皮牛肉", price: 9.99 },
+    { name: "嫩羊肉", price: 9.99 },
+    { name: "原切牛舌片", price: 9.99 },
+    { name: "鸭郡花", price: 9.99 },
+    { name: "鸭掌腿", price: 9.99 },
+    { name: "肥牛肉", price: 9.99 },
+    { name: "肉粒肥牛", price: 9.99 },
+    { name: "卷心菜肥牛", price: 9.99 },
+    { name: "无骨鸭爪", price: 9.99 },
+    { name: "牛黄喉片", price: 9.99 },
+    { name: "袋子牛肉（含辣）", price: 9.99 },
+    { name: "岔尾", price: 9.99 },
+    { name: "鸭肠", price: 9.99 },
+    { name: "鸭蛋黄流沙丸子", price: 9.99 },
+    { name: "麻辣鸡脖筋", price: 9.99 },
+    { name: "鸡筋（缺货）", price: 9.99 },
+    { name: "梭鱼（马面鱼）", price: 9.99 },
+    { name: "鳕鱼片", price: 9.99 },
+    { name: "火锅虾饺", price: 9.99 },
+
+    // 其他价格或特殊项目
+    { name: "香油", price: null },
+    { name: "蒜蓉", price: null },
+    { name: "红糖冰粉", price: 3.9 },
+    { name: "酸梅汤1升", price: 5 },
+    { name: "可乐", price: 1.5 },
+    { name: "雪碧", price: 1.5 },
+    { name: "果汁", price: 2.5 },
+    { name: "冰红茶", price: 2.5 },
+    { name: "冰绿茶免费", price: 0 },
+    { name: "柠檬水免费", price: 0 },
+    { name: "养生猪蹄汤", price: 14.99 },
+    { name: "冰镇猪耳朵", price: 9 },
+    { name: "烤鸭饼", price: 9 },
+    { name: "蛋炒饭", price: 8 },
+    { name: "干碟", price: 2 },
         ];
 
         function App() {
@@ -212,13 +284,13 @@
 
             return (
                 <div className="container">
-                    <h1>火锅点餐系统</h1>
+                    <h1>7/27喜火锅吃啥</h1>
                     <table>
                         <thead>
                             <tr>
                                 <th>菜品</th>
                                 <th>价格 (美元)</th>
-                                <th>数量</th>
+                                <th className="quantity-column">数量</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -226,7 +298,7 @@
                                 <tr key={item.name}>
                                     <td>{item.name}</td>
                                     <td>{item.price ? `$${item.price.toFixed(2)}` : '市价'}</td>
-                                    <td>
+                                    <td className="quantity-column">
                                         <select
                                             value={orders[item.name] || 0}
                                             onChange={(e) => handleQuantityChange(item.name, parseInt(e.target.value))}
@@ -250,5 +322,8 @@
 
         ReactDOM.render(<App />, document.getElementById('root'));
     </script>
+    <footer>
+        <p><a href="https://chw.chwjh.com">© 2024 CHW. Made on earth by a human.</a></p>
+      </footer>
 </body>
 </html>
