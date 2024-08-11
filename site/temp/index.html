@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>7/27喜火锅吃啥 V2.3</title>
+    <title>7/27喜火锅吃啥 V2.4</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
@@ -100,6 +100,20 @@
             text-align: right;
             margin-top: 10px;
             font-size: 1em;
+        }
+        .reset-served-button {
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #36c8f4b6;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .reset-served-button:hover {
+            background-color: #d32f2f;
         }
         @media (max-width: 600px) {
             .container {
@@ -253,8 +267,6 @@
     { name: "雪碧", price: 1.5 },
     { name: "果汁", price: 2.5 },
     { name: "王老吉", price: 2.5 },
-    { name: "冰绿茶免费", price: 0 },
-    { name: "柠檬水免费", price: 0 },
     { name: "养生猪蹄汤", price: 14.99 },
     { name: "凉拌猪耳朵", price: 9 },
     { name: "烧烤脑花", price: 9 },
@@ -344,9 +356,18 @@
                 }
             };
 
+            const resetServedItems = () => {
+                const resetServed = {};
+                Object.keys(servedItems).forEach(key => {
+                    resetServed[key] = 0;
+                });
+                setServedItems(resetServed);
+                firebase.database().ref('served').set(resetServed);
+            };
+
             return (
                 <div className="container">
-                    <h1>7/27喜火锅吃啥 V2.3</h1>
+                    <h1>7/27喜火锅吃啥 V2.4</h1>
                     <table>
                         <thead>
                             <tr>
@@ -385,6 +406,7 @@
                             ))}
                         </tbody>
                     </table>
+                    <button onClick={resetServedItems} className="reset-served-button">重置已上菜</button>
                     <div className="tip-selection">
                         <label htmlFor="tipSelect">小费比例: </label>
                         <select id="tipSelect" value={tipPercentage} onChange={handleTipChange}>
