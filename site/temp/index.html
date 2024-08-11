@@ -142,8 +142,8 @@
             authDomain: "xihuoguo-78035.firebaseapp.com",
             projectId: "xihuoguo-78035",
             storageBucket: "xihuoguo-78035.appspot.com",
-            messagingSenderId: "155471484095",
-            appId: "1:155471484095:web:b258608fd3ad9a8f05a20a",
+            messagingSenderId: "5471484095",
+            appId: "1:5471484095:web:b258608fd3ad9a8f05a20a",
             measurementId: "G-N1T5L8WEN7"
         };
 
@@ -152,7 +152,7 @@
 
         const menuItems = [
         { name: "全红小锅1000克 (推荐四人以下)", price: 25 },
-    { name: "全红中锅1500克 (推荐四人以上)", price: 30 },
+    { name: "全红中锅00克 (推荐四人以上)", price: 30 },
     { name: "额外加红油500克X份", price: 5 },
     { name: "番茄鸳鸯锅", price: 25 },
     // $3.99 列
@@ -185,7 +185,7 @@
     { name: "龙口粉丝", price: 3.99 },
     { name: "炸牛羊丸4个", price: 3.99 },
     // $6.99 列
-    { name: "六元菜约150克", price: 6.99 },
+    { name: "六元菜约0克", price: 6.99 },
     { name: "鸭血", price: 6.99 },
     { name: "嫩滑猪肝", price: 6.99 },
     { name: "嫩鱼花", price: 6.99 },
@@ -228,7 +228,7 @@
     { name: "虾仁", price: 6.99 },
     { name: "鲜肉抄手", price: 6.99 },
     // $9.99 列
-    { name: "九元菜约150克", price: 9.99 },
+    { name: "九元菜约0克", price: 9.99 },
     { name: "凤味牛蹄筋", price: 9.99 },
     { name: "卤牛肚", price: 9.99 },
     { name: "红烧肥肠", price: 9.99 },
@@ -414,13 +414,14 @@
                             <option value="5">5%</option>
                             <option value="10">10%</option>
                             <option value="15">15%</option>
+                            <option value="18">18%</option>
                             <option value="20">20%</option>
                         </select>
                     </div>
                     <div className="total-price">
                         <p>蔡品总价: ${subtotal.toFixed(2)}</p>
                         <p>小费 ({tipPercentage}%): ${tipAmount.toFixed(2)}</p>
-                        <h2>总价: ${totalWithTip.toFixed(2)}</h2>
+                        <h2>(不含税)总价: ${totalWithTip.toFixed(2)}</h2>
                     </div>
                     <div className="floating-buttons">
                         <button onClick={copyOrderToClipboard}>复制订单到剪贴板</button>
