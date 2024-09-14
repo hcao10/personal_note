@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>临时导航</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            padding: 0;
+        }
+        #page-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url(https://chw.chwjh.com/media/bg-hue.svg);
+            background-position: 50%;
+            background-size: cover;
+            z-index: -1;
+        }
+        .content {
+            position: relative;
+            z-index: 1;
+            padding: 20px;
+            color: #333;
+            font-family: Arial, sans-serif;
+        }
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(-45deg, 
+                #ff9aa2, /* 柔和的红 */
+                #ffb7b2, /* 柔和的橙 */
+                #ffdac1, /* 柔和的黄 */
+                #e2f0cb, /* 柔和的绿 */
+                #b5ead7, /* 柔和的青 */
+                #c7ceea, /* 柔和的蓝 */
+                #e2c4f5  /* 柔和的紫 */
+            );
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            z-index: -1;
+        }
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        .container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+            width: 80%;
+            max-width: 500px;
+        }
+        .button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 15px 0;
+            border: none;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.25);
+            color: #4a4a4a;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+        }
+        .button:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- <div class="background"></div> -->
+    <div id="page-bg"></div>
+    <div class="container">
+        <a href="./Claude (9_14_2024 7_33_56 PM).html" class="button">Claude</a>
+        <a href="./ChatGPT (9_14_2024 7_27_38 PM).html" class="button">ChatGPT</a>
+
+    </div>
+
+    <script>
+        let bg = document.getElementById("page-bg");
+        bg.style.setProperty("will-change", "filter", "");
+        let hue = 0;
+        setInterval(function() {
+            hue = (hue + 1) % 360;
+            bg.style.setProperty("filter", "hue-rotate(" + hue + "deg)", "");
+        }, 5000 / 360);
+        document.querySelectorAll('.button').forEach(button => {
+            button.addEventListener('mouseover', () => {
+                button.style.transform = 'scale(1.05) translateY(-5px)';
+            });
+            button.addEventListener('mouseout', () => {
+                button.style.transform = 'scale(1) translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>
