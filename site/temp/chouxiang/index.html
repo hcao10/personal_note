@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -31,36 +30,6 @@
             color: #333;
             font-family: Arial, sans-serif;
         }
-        .background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(-45deg, 
-                #ff9aa2, /* 柔和的红 */
-                #ffb7b2, /* 柔和的橙 */
-                #ffdac1, /* 柔和的黄 */
-                #e2f0cb, /* 柔和的绿 */
-                #b5ead7, /* 柔和的青 */
-                #c7ceea, /* 柔和的蓝 */
-                #e2c4f5  /* 柔和的紫 */
-            );
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            z-index: -1;
-        }
-        @keyframes gradientBG {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
         .container {
             position: absolute;
             top: 50%;
@@ -73,10 +42,13 @@
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
             width: 80%;
             max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* 新增：居中对齐子元素 */
         }
         .button {
             display: block;
-            width: 100%;
+            width: 80%; /* 修改：减小宽度以适应居中布局 */
             padding: 15px;
             margin: 15px 0;
             border: none;
@@ -98,7 +70,6 @@
     </style>
 </head>
 <body>
-    <!-- <div class="background"></div> -->
     <div id="page-bg"></div>
     <div class="container">
         <a href="./Claude (9_14_2024 7_33_56 PM).html" class="button">Claude</a>
