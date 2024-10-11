@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Markdown Display</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <div id="content"></div>
+    <script>
+        function loadMarkdownFile(filename) {
+            fetch(filename)
+                .then(response => response.text())
+                .then(text => {
+                    const div = document.createElement('div');
+                    div.innerHTML = marked.parse(text);
+                    document.getElementById('content').appendChild(div);
+                })
+                .catch(err => console.error(err));
+        }
+
+        const numberOfFiles = 20; // 假设您有10个文件
+        for (let i = 0; i < numberOfFiles; i++) {
+            loadMarkdownFile(i + '_note.md');
+        }
+    </script>
+</body>
+</html>

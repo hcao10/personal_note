@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7月27日恰火锅</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; }
+        h1 { color: #333; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        input[type="number"] { width: 50px; }
+        button { margin-top: 20px; padding: 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #45a049; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // Initialize Firebase (replace with your own config)
+        const firebaseConfig = {
+            // Your Firebase configuration here
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            databaseURL: "YOUR_DATABASE_URL",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        const menuItems = [
+            { name: "全红小锅1000克 (推荐四人以下)", price: 25 },
+            { name: "全红中锅1500克 (推荐四人以上)", price: 30 },
+            { name: "额外加红油500克X份", price: 5 },
+            { name: "番茄酱香锅", price: 25 },
+            { name: "酸菜鱼", price: 6.99 },
+            { name: "毛肚", price: 3.99 },
+            { name: "藕片", price: 3.99 },
+            { name: "鱿鱼花", price: 3.99 },
+            { name: "蘑菇", price: 3.99 },
+            { name: "凤味牛蹄筋", price: 9.99 },
+            { name: "卤牛肚", price: 9.99 },
+            { name: "红烧肥肠", price: 9.99 },
+            { name: "猪耳朵（猪大梯）", price: 9.99 },
+            { name: "黑椒嫩牛肉", price: 9.99 },
+            { name: "竹笋片", price: null },
+            { name: "莲藕片", price: null },
+            { name: "白萝卜片", price: null },
+            { name: "香菜", price: null },
+            { name: "山药", price: null },
+            { name: "海鲜菇", price: null },
+            { name: "豆皮", price: null },
+            { name: "红薯宽粉", price: null },
+            { name: "土豆片", price: null },
+            { name: "百花卷", price: null },
+            { name: "方便面", price: null },
+            { name: "干工面", price: null },
+            { name: "黑木耳", price: null },
+            { name: "老南瓜", price: null },
+            { name: "黄瓜条", price: null },
+            { name: "煎蛋四个", price: null },
+            { name: "豆芽", price: null },
+            { name: "冬瓜", price: null },
+            { name: "葫芦条", price: null },
+            { name: "鸭血", price: null },
+            { name: "白萝卜花", price: null },
+            { name: "金针菇", price: null },
+            { name: "火锅小酥肉", price: null },
+            { name: "肉多多牛蹄筋", price: null },
+            { name: "白千层肚", price: null },
+            { name: "鸭肠", price: null },
+            { name: "卤猪耳朵", price: null },
+            { name: "火锅小香肠", price: null },
+            { name: "香菜肉丸", price: null },
+            { name: "龙利鱼", price: null },
+            { name: "八爪小章鱼", price: null },
+            { name: "肥牛卷", price: null },
+            { name: "羊肉卷", price: null },
+            { name: "贡菜", price: null },
+            { name: "虾滑", price: null },
+            { name: "山珍牛肝菌", price: null },
+            { name: "海带丝", price: null },
+            { name: "开花脆皮肠", price: null },
+            { name: "半熟小手头", price: null },
+            { name: "鱼籽虾滑", price: null },
+            { name: "双汇火腿肠", price: null },
+            { name: "猪脑花", price: null },
+            { name: "火锅虾饺", price: null },
+            { name: "腰片", price: null },
+            { name: "魔芋", price: null },
+            { name: "豆皮卷", price: null },
+            { name: "白毛肚", price: null },
+            { name: "响铃卷", price: null },
+            { name: "大弹布土豆丝", price: null },
+            { name: "虾仁", price: null },
+            { name: "鲜肉抄手", price: null },
+            { name: "红糖冰粉", price: 3.9 },
+            { name: "酸梅汤1升", price: 5 },
+            { name: "可乐", price: 1.5 },
+            { name: "雪碧", price: 1.5 },
+            { name: "果汁", price: 2 },
+            { name: "小吃", price: null },
+            { name: "凉拌猪耳朵", price: 9 },
+            { name: "烧烤脆肠", price: 9 },
+            { name: "蛋炒饭", price: 8 },
+            { name: "干碟", price: 2 },
+            { name: "养生猪蹄汤", price: 14.99 },
+        ];
+
+        function App() {
+            const [orders, setOrders] = React.useState({});
+
+            React.useEffect(() => {
+                // Listen for changes in the database
+                const ordersRef = firebase.database().ref('orders');
+                ordersRef.on('value', (snapshot) => {
+                    const data = snapshot.val();
+                    if (data) {
+                        setOrders(data);
+                    }
+                });
+
+                // Cleanup listener on component unmount
+                return () => ordersRef.off();
+            }, []);
+
+            const handleQuantityChange = (itemName, quantity) => {
+                const newOrders = { ...orders, [itemName]: quantity };
+                setOrders(newOrders);
+                // Update Firebase
+                firebase.database().ref('orders').set(newOrders);
+            };
+
+            const copyOrderToClipboard = () => {
+                const orderSummary = Object.entries(orders)
+                    .filter(([_, quantity]) => quantity > 0)
+                    .map(([item, quantity]) => `${item} - ${quantity}`)
+                    .join('\n');
+                navigator.clipboard.writeText(orderSummary)
+                    .then(() => alert('订单已复制到剪贴板'))
+                    .catch(err => console.error('复制失败:', err));
+            };
+
+            return (
+                <div>
+                    <h1>7月27日恰喜火锅（价格实在懒地输入了，凑合看吧）</h1>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>菜品</th>
+                                <th>价格 (美元，可能不对)</th>
+                                <th>数量</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {menuItems.map(item => (
+                                <tr key={item.name}>
+                                    <td>{item.name}</td>
+                                    <td>{item.price ? `$${item.price.toFixed(2)}` : '市价'}</td>
+                                    <td>
+                                        <input
+                                            type="number"
+                                            min="0"
+                                            value={orders[item.name] || 0}
+                                            onChange={(e) => handleQuantityChange(item.name, parseInt(e.target.value) || 0)}
+                                        />
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    <button onClick={copyOrderToClipboard}>复制订单到剪贴板</button>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
