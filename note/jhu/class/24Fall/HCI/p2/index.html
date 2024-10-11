@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematical Formula Input Keyboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .keyboard {
+            width: 600px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            display: flex;
+        }
+        .left-panel {
+            width: 150px;
+            margin-right: 20px;
+        }
+        .right-panel {
+            flex-grow: 1;
+        }
+        .screen {
+            width: 100%;
+            height: 100px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-size: 24px;
+            padding: 10px;
+            box-sizing: border-box;
+            overflow: auto;
+        }
+        .keys {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 5px;
+        }
+        .key {
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .key:hover {
+            background-color: #e8e8e8;
+        }
+        .joystick {
+            width: 120px;
+            height: 120px;
+            background-color: #ccc;
+            border-radius: 50%;
+            margin: 10px auto;
+            position: relative;
+            cursor: pointer;
+        }
+        .joystick-dot {
+            width: 20px;
+            height: 20px;
+            background-color: #333;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .mode-switch {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 10px;
+        }
+        .mode-btn {
+            padding: 5px 10px;
+            background-color: #ddd;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .mode-btn.active {
+            background-color: #bbb;
+        }
+    </style>
+</head>
+<body>
+    <div class="keyboard">
+        <div class="left-panel">
+            <div class="joystick">
+                <div class="joystick-dot"></div>
+            </div>
+        </div>
+        <div class="right-panel">
+            <div class="screen" id="screen"></div>
+            <div class="mode-switch">
+                <button class="mode-btn active" data-mode="abc">ABC</button>
+                <button class="mode-btn" data-mode="greek">Greek</button>
+                <button class="mode-btn" data-mode="math">Math</button>
+            </div>
+            <div class="keys" id="keys"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+            TeX: {extensions: ["AMSmath.js", "AMSsymbols.js"]}
+        });
+    </script>
+    <script>
+        const screen = document.getElementById('screen');
+        const keysContainer = document.getElementById('keys');
+        const modeBtns = document.querySelectorAll('.mode-btn');
+        const joystick = document.querySelector('.joystick');
+        const joystickDot = document.querySelector('.joystick-dot');
+
+        let currentFormula = '';
+        let cursorPosition = 0;
+        let rotationAngle = 0;
+        let isRotating = false;
+        let holdTimeout;
+
+        const keyboards = {
+            abc: ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '1', '2', '3', '4', '5', '6'],
+            greek: ['ζ', 'ς', 'ε', 'ρ', 'τ', 'υ', 'θ', 'ι', 'ο', 'π', 'α', 'σ', 'δ', 'φ', 'γ', 'η', 'ξ', 'κ', 'λ', 'ζ', 'χ', 'ψ', 'ω', 'β', 'ν', 'μ', '1', '2', '3', '4', '5', '6'],
+            math: ['∫', '∑', '∏', '√', '≠', '≤', '≥', '±', '∞', '∂', '∇', 'lim', 'sin', 'cos', 'tan', 'log', 'ln', 'exp', '(', ')', '[', ']', '{', '}', '+', '-', '×', '÷', '=', '<', '>', '|']
+        };
+
+        function renderKeyboard(mode) {
+            keysContainer.innerHTML = '';
+            keyboards[mode].forEach(key => {
+                const keyElement = document.createElement('div');
+                keyElement.className = 'key';
+                keyElement.textContent = key;
+                keyElement.addEventListener('click', () => {
+                    insertAtCursor(key);
+                    renderFormula();
+                });
+                keysContainer.appendChild(keyElement);
+            });
+        }
+
+        function insertAtCursor(text) {
+            currentFormula = currentFormula.slice(0, cursorPosition) + text + currentFormula.slice(cursorPosition);
+            cursorPosition += text.length;
+        }
+
+        function renderFormula() {
+            const formulaWithCursor = currentFormula.slice(0, cursorPosition) + '|' + currentFormula.slice(cursorPosition);
+            screen.innerHTML = '$$' + formulaWithCursor + '$$';
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub, screen]);
+        }
+
+        modeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                modeBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderKeyboard(btn.dataset.mode);
+            });
+        });
+
+        joystick.addEventListener('mousedown', handleJoystickStart);
+        joystick.addEventListener('touchstart', handleJoystickStart);
+
+        function handleJoystickStart(e) {
+            e.preventDefault();
+            isRotating = false;
+            rotationAngle = 0;
+            document.addEventListener('mousemove', handleJoystickMove);
+            document.addEventListener('touchmove', handleJoystickMove);
+            document.addEventListener('mouseup', handleJoystickEnd);
+            document.addEventListener('touchend', handleJoystickEnd);
+
+            holdTimeout = setTimeout(() => {
+                const direction = getDirection(rotationAngle);
+                handleJoystickHold(direction);
+            }, 500);
+        }
+
+        function handleJoystickMove(e) {
+            const joystickRect = joystick.getBoundingClientRect();
+            const centerX = joystickRect.left + joystickRect.width / 2;
+            const centerY = joystickRect.top + joystickRect.height / 2;
+            const maxDistance = joystickRect.width / 2 - 10;
+
+            let clientX, clientY;
+            if (e.type === 'touchmove') {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+
+            let deltaX = clientX - centerX;
+            let deltaY = clientY - centerY;
+            const distance = Math.min(Math.sqrt(deltaX * deltaX + deltaY * deltaY), maxDistance);
+            const angle = Math.atan2(deltaY, deltaX);
+
+            deltaX = Math.cos(angle) * distance;
+            deltaY = Math.sin(angle) * distance;
+
+            joystickDot.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+
+            if (distance > maxDistance * 0.5) {
+                if (!isRotating) {
+                    isRotating = true;
+                    rotationAngle = angle;
+                } else {
+                    const angleDiff = angle - rotationAngle;
+                    if (Math.abs(angleDiff) > Math.PI / 4) {
+                        handleJoystickRotate(angleDiff > 0);
+                        rotationAngle = angle;
+                    }
+                }
+            }
+        }
+
+        function handleJoystickEnd() {
+            document.removeEventListener('mousemove', handleJoystickMove);
+            document.removeEventListener('touchmove', handleJoystickMove);
+            document.removeEventListener('mouseup', handleJoystickEnd);
+            document.removeEventListener('touchend', handleJoystickEnd);
+            joystickDot.style.transform = 'translate(0, 0)';
+            clearTimeout(holdTimeout);
+        }
+
+        function getDirection(angle) {
+            const directions = ['right', 'down-right', 'down', 'down-left', 'left', 'up-left', 'up', 'up-right'];
+            return directions[Math.round(angle / (Math.PI / 4) + 4) % 8];
+        }
+
+        function handleJoystickRotate(clockwise) {
+            if (clockwise) {
+                cursorPosition = Math.min(cursorPosition + 1, currentFormula.length);
+            } else {
+                cursorPosition = Math.max(cursorPosition - 1, 0);
+            }
+            renderFormula();
+        }
+
+        function handleJoystickHold(direction) {
+            switch (direction) {
+                case 'up':
+                    insertAtCursor('\\frac{}{}');
+                    cursorPosition -= 2;
+                    break;
+                case 'down':
+                    insertAtCursor('\\frac{}{}');
+                    cursorPosition -= 1;
+                    break;
+                case 'up-right':
+                    insertAtCursor('^{}');
+                    cursorPosition -= 1;
+                    break;
+                case 'down-right':
+                    insertAtCursor('_{}');
+                    cursorPosition -= 1;
+                    break;
+            }
+            renderFormula();
+        }
+
+        renderKeyboard('abc');
+        renderFormula();
+    </script>
+</body>
+</html>
